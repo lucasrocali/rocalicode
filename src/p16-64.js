@@ -1,3 +1,4 @@
+//Mar 5, 2022, 3:20:00 PM	
 
 //----
 const fv = 6.4
@@ -8,7 +9,6 @@ const pt = 1
 const nsi = 5
 const dbg = 0
 const byli = 1
-const dbgpoints = [] //[[x,y]]
 //-
 const PI = 3.14159265359;
 const s = 600;
@@ -16,23 +16,23 @@ const c = {
   x: s*0.5,
   y: s*0.5,
   dr: s,
-  da:  0.8,
-  dda: 15,
+  da:  0.4,
+  dda: 30,
   ddr: 60
 };
-const laps = 900
-let li = 0;
-const dli = 2;
+const laps = 1420
+let li = 1;
+const dli = 4;
 const n = 360*laps;
 ///-
 const di = 1;
 const c1 = {
-  da: 1,
-  dr: 120
+  da: 1.001,
+  dr: 90
 }
 const c2 = {
-  da: 1,
-  dr: 120
+  da: 1.001,
+  dr: 50
 }
 
 const fname = `p${fv}.${subv}.${pt}_${Object.values(c1).join('_')}-${Object.values(c2).join('_')}-${c.da}-${c.dda}.png`
@@ -141,7 +141,6 @@ function runi (i) {
     line(cx1,cy1,x,y)
     line(cx2,cy2,x,y)
     pt ? point(x, y) : lx && ly && line(lx,ly, x, y);
-    dbgpoints.push([x,y])
   } else {
     pt ? point(x, y) : lx && ly && line(lx,ly, x, y);
   } 
@@ -170,37 +169,17 @@ function draw() {
   dbg && background('white');
   
   if (an) {
-    if (dbg) {
-      let dbgi;
-      for (dbgi = 0; dbgi < dbgpoints.length ; dbgi++ ) {
-        if (pt) {
-          point(dbgpoints[dbgi][0], dbgpoints[dbgi][1])
-        } else {
-          dbgi > 0 && line(dbgpoints[dbgi][0], dbgpoints[dbgi][1], dbgpoints[dbgi-1][0], dbgpoints[dbgi-1][1])
-        }
-      }
-    }
     if (byli) {
-      for (i = li * 360 ; i < (li+1)*(360 +di); i += di) {
+       for (i = li * 360 ; i < (li+1)*360; i += di) {
         runi(i)
       }
       lx = 0, ly = 0;
       li += dli;
     } else {
-      if (dbg) {
-        let dbgi;
-        for (dbgi = 0; dbgi < dbgpoints.length ; dbgi++ ) {
-          if (pt) {
-            point(dbgpoints[dbgi][0], dbgpoints[dbgi][1])
-          } else {
-            dbgi > 0 && line(dbgpoints[dbgi][0], dbgpoints[dbgi][1], dbgpoints[dbgi-1][0], dbgpoints[dbgi-1][1])
-          }
-        }
-      }
       runi(i);
       i += di;
       
-      if (i % (360 + di) === 0) {
+      if (i % 360 === 0) {
         li += 1;
       }
     }
@@ -217,5 +196,3 @@ function draw() {
   }
 }
 
-
-//copy from p5js editor

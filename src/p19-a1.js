@@ -1,41 +1,41 @@
+//May 27, 2022, 6:19:55 PM	
 
 //----
-const fv = 6.4
+const fv = 1
 const subv = 1
 const sv = 0
 const an = 1
-const pt = 1
+const pt = 0
 const nsi = 5
-const dbg = 0
+const dbg = 1
 const byli = 1
-const dbgpoints = [] //[[x,y]]
 //-
 const PI = 3.14159265359;
-const s = 600;
+const s = 610;
 const c = {
   x: s*0.5,
   y: s*0.5,
-  dr: s,
-  da:  0.8,
-  dda: 15,
+  dr: s*0.5,
+  da:  1,
+  dda: 90,
   ddr: 60
 };
-const laps = 900
-let li = 0;
-const dli = 2;
+const laps = 420
+let li = 10;
 const n = 360*laps;
 ///-
-const di = 1;
+const di = dbg? 6 : 1;
+const dli = 1;
 const c1 = {
-  da: 1,
-  dr: 120
+  da: 1.001,
+  dr: 100
 }
 const c2 = {
-  da: 1,
+  da: 1.004,
   dr: 120
 }
 
-const fname = `p${fv}.${subv}.${pt}_${Object.values(c1).join('_')}-${Object.values(c2).join('_')}-${c.da}-${c.dda}.png`
+const fname = `a${fv}.${subv}.${pt}_${Object.values(c1).join('_')}-${Object.values(c2).join('_')}-${c.da}-${c.dda}.png`
 
 let i = 0, lx = 0, ly = 0, dc1 = 0, dc2 = 0;
 
@@ -111,7 +111,7 @@ function getrc(i, xc = c.x, xy = c.y, dr = 50, da=1) {
 }
 
 function runi (i) {
-  const ddx1 = c.x + Math.cos(radians(li*c.da)) * c.dr
+  const ddx1 = c.x + Math.cos(radians(li*c.da)) * c.dr 
   const ddy1 = c.y + Math.sin(radians(li*c.da)) * c.dr
     
   const ddx2 = c.x + Math.cos(radians(c.dda+li*c.da)) * c.dr
@@ -119,10 +119,13 @@ function runi (i) {
   
   dbg && line(c.x,c.y, ddx1, ddy1)
   dbg && line(c.x,c.y, ddx2, ddy2)
-  
 
-  const [cx1,cy1] = getrc(i,ddx1,ddy1,c1.dr,c1.da)
-  const [cx2,cy2] = getrc(i,ddx2,ddy2,c2.dr,c2.da)
+  const c1dan = 0// noise(li*0.01)*c1.da*0.1
+  const c2dan = 0// noise(li*0.01)*c2.da
+
+
+  const [cx1,cy1] = getrc(i,ddx1,ddy1,c1.dr,c1.da + c1dan)
+  const [cx2,cy2] = getrc(i,ddx2,ddy2,c2.dr,c2.da + c2dan)
   
   // circle(cx1,cy1,dc1*2)
   // circle(cx2,cy2,dc2*2)
@@ -141,7 +144,6 @@ function runi (i) {
     line(cx1,cy1,x,y)
     line(cx2,cy2,x,y)
     pt ? point(x, y) : lx && ly && line(lx,ly, x, y);
-    dbgpoints.push([x,y])
   } else {
     pt ? point(x, y) : lx && ly && line(lx,ly, x, y);
   } 
@@ -170,37 +172,17 @@ function draw() {
   dbg && background('white');
   
   if (an) {
-    if (dbg) {
-      let dbgi;
-      for (dbgi = 0; dbgi < dbgpoints.length ; dbgi++ ) {
-        if (pt) {
-          point(dbgpoints[dbgi][0], dbgpoints[dbgi][1])
-        } else {
-          dbgi > 0 && line(dbgpoints[dbgi][0], dbgpoints[dbgi][1], dbgpoints[dbgi-1][0], dbgpoints[dbgi-1][1])
-        }
-      }
-    }
     if (byli) {
-      for (i = li * 360 ; i < (li+1)*(360 +di); i += di) {
+       for (i = li * 360 ; i < (li+1)*360; i += di) {
         runi(i)
       }
-      lx = 0, ly = 0;
+      // lx = 0, ly = 0;
       li += dli;
     } else {
-      if (dbg) {
-        let dbgi;
-        for (dbgi = 0; dbgi < dbgpoints.length ; dbgi++ ) {
-          if (pt) {
-            point(dbgpoints[dbgi][0], dbgpoints[dbgi][1])
-          } else {
-            dbgi > 0 && line(dbgpoints[dbgi][0], dbgpoints[dbgi][1], dbgpoints[dbgi-1][0], dbgpoints[dbgi-1][1])
-          }
-        }
-      }
       runi(i);
       i += di;
       
-      if (i % (360 + di) === 0) {
+      if (i % 360 === 0) {
         li += 1;
       }
     }
@@ -217,5 +199,3 @@ function draw() {
   }
 }
 
-
-//copy from p5js editor

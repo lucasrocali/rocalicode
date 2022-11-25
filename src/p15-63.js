@@ -1,14 +1,13 @@
+//Mar 1, 2022, 11:30:15 PM	
 
 //----
-const fv = 6.4
-const subv = 1
+const fv = 6.3
+const subv = 5
 const sv = 0
 const an = 1
 const pt = 1
 const nsi = 5
 const dbg = 0
-const byli = 1
-const dbgpoints = [] //[[x,y]]
 //-
 const PI = 3.14159265359;
 const s = 600;
@@ -16,22 +15,21 @@ const c = {
   x: s*0.5,
   y: s*0.5,
   dr: s,
-  da:  0.8,
-  dda: 15,
-  ddr: 60
+  da: 0.08,
+  dda: 30
 };
-const laps = 900
-let li = 0;
-const dli = 2;
+const laps = 620
+let li = 1;
+const dli = 1;
 const n = 360*laps;
 ///-
 const di = 1;
 const c1 = {
   da: 1,
-  dr: 120
+  dr: 100
 }
 const c2 = {
-  da: 1,
+  da: 1.001,
   dr: 120
 }
 
@@ -96,14 +94,12 @@ function intersection(x0, y0, r0, x1, y1, r1) {
 
 function getrc(i, xc = c.x, xy = c.y, dr = 50, da=1) {
   const a = radians(i*da)
-  const x = xc + Math.cos(a) * dr 
-  const y = xy + Math.sin(a) * dr
+  const x = xc + Math.cos(a) * dr + noise(0.01*li)*40
+  const y = xy + Math.sin(a) * dr + noise(0.01*li)*40
   
 
   if (dbg) {
-    circle(xc,xy,dr*2);
-    line(xc,xy,x,y);
-    
+    // line(xc,xy,x,y);
     point(x,y)
   }
 
@@ -130,18 +126,18 @@ function runi (i) {
   
   // line(cx1,cy1,cx2,cy2)
   if (dc1 === 0) {
-    dc1 = dist(cx1,cy1,c.x,c.y) + c.ddr
+    dc1 = dist(cx1,cy1,c.x,c.y)
   }
   if (dc2 === 0) {
-    dc2 = dist(cx2,cy2,c.x,c.y) + c.ddr
+    dc2 = dist(cx2,cy2,c.x,c.y)
   }
  
   const [x,_,y,__] = intersection(cx1,cy1,dc1,cx2,cy2,dc2)
+  if (dbg && i % 2 !== 0) return;
   if (dbg) {
     line(cx1,cy1,x,y)
     line(cx2,cy2,x,y)
     pt ? point(x, y) : lx && ly && line(lx,ly, x, y);
-    dbgpoints.push([x,y])
   } else {
     pt ? point(x, y) : lx && ly && line(lx,ly, x, y);
   } 
@@ -170,44 +166,13 @@ function draw() {
   dbg && background('white');
   
   if (an) {
-    if (dbg) {
-      let dbgi;
-      for (dbgi = 0; dbgi < dbgpoints.length ; dbgi++ ) {
-        if (pt) {
-          point(dbgpoints[dbgi][0], dbgpoints[dbgi][1])
-        } else {
-          dbgi > 0 && line(dbgpoints[dbgi][0], dbgpoints[dbgi][1], dbgpoints[dbgi-1][0], dbgpoints[dbgi-1][1])
-        }
-      }
+    for (i = li * 360 ; i < (li+1)*360; i += di) {
+      runi(i)
     }
-    if (byli) {
-      for (i = li * 360 ; i < (li+1)*(360 +di); i += di) {
-        runi(i)
-      }
-      lx = 0, ly = 0;
-      li += dli;
-    } else {
-      if (dbg) {
-        let dbgi;
-        for (dbgi = 0; dbgi < dbgpoints.length ; dbgi++ ) {
-          if (pt) {
-            point(dbgpoints[dbgi][0], dbgpoints[dbgi][1])
-          } else {
-            dbgi > 0 && line(dbgpoints[dbgi][0], dbgpoints[dbgi][1], dbgpoints[dbgi-1][0], dbgpoints[dbgi-1][1])
-          }
-        }
-      }
-      runi(i);
-      i += di;
-      
-      if (i % (360 + di) === 0) {
-        li += 1;
-      }
-    }
-   
 //     point(li, s)
 //     point(s, li)
-  
+    lx = 0, ly = 0, dc1 = 0, dc2 = 0
+    li += dli;
   }
   
   if (an && li >= laps) {
@@ -217,5 +182,3 @@ function draw() {
   }
 }
 
-
-//copy from p5js editor
