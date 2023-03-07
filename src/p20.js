@@ -1,39 +1,39 @@
 //----
-const fv = 1
-const subv = 1
-const sv = 0
+const fv = 2
+const subv = 6
+const sv = 1
 const an = 1
-const pt = 0
+const pt = 1
 const nsi = 5
 const dbg = 0
 const byli = 1
 //-
 const PI = 3.14159265359;
-const s = 610;
+const s = 720;
 const c = {
-  x: s*0.5,
+  x: s*0.55,
   y: s*0.5,
   dr: s*0.5,
   da:  1,
-  dda: 90,
-  ddr: 60
+  dda: 60,
+  ddr: 40
 };
-const laps = 420
-let li = 10;
+const laps = 640
+let li = 0;
 const n = 360*laps;
 ///-
 const di = dbg? 6 : 1;
 const dli = 1;
 const c1 = {
-  da: 1.001,
-  dr: 100
+  da: 2,
+  dr: 80
 }
 const c2 = {
-  da: 1.004,
-  dr: 120
+  da: 1,
+  dr: 160
 }
 
-const fname = `a${fv}.${subv}.${pt}_${Object.values(c1).join('_')}-${Object.values(c2).join('_')}-${c.da}-${c.dda}.png`
+const fname = `b${fv}.${subv}.${pt}_${Object.values(c1).join('_')}-${Object.values(c2).join('_')}-${c.da}-${c.dda}.png`
 
 let i = 0, lx = 0, ly = 0, dc1 = 0, dc2 = 0;
 
@@ -113,7 +113,7 @@ function runi (i) {
   const ddy1 = c.y + Math.sin(radians(li*c.da)) * c.dr
     
   const ddx2 = c.x + Math.cos(radians(c.dda+li*c.da)) * c.dr
-  const ddy2 = c.y + Math.sin(radians(c.dda+li*c.da)) * c.dr //+ noise(i*0.1)*i*0.0001
+  const ddy2 = c.y + Math.sin(radians(c.dda+li*c.da)) * c.dr //+ noise(i*0.1)*i*0.001
   
   dbg && line(c.x,c.y, ddx1, ddy1)
   dbg && line(c.x,c.y, ddx2, ddy2)
@@ -171,6 +171,7 @@ function draw() {
   
   if (an) {
     if (byli) {
+      lx = 0, ly = 0
        for (i = li * 360 ; i < (li+1)*360; i += di) {
         runi(i)
       }
