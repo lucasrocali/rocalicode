@@ -22,7 +22,7 @@ const da = (dp * PI) / s;
 const vas = [0.002,0.003,0.004]
 const vbs = [20,30,40,50]
 
-const va = 0.1 //width scale | -- | 
+const va = 0.12 //width scale | -- | 
 const vb = 40 //line height
 
 const xs = [0],

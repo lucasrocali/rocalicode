@@ -16,9 +16,9 @@ const c = {
   dr: s,
   da: 0.2
 };
-const laps = 310
+const laps = 420
 let li = 1;
-const dli = 1;
+const dli = 2;
 const n = 360*laps;
 ///-
 const di = 1;
